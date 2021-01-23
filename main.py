@@ -46,7 +46,7 @@ def logged():
 
     number_entry = Entry(app2, width=20)
     number_entry.place(x=0, y=40)
-
+    # Creating and Defining the signin button for users to enter their number
     def sigin():
         try:
             x = int(number_entry.get())
@@ -61,12 +61,13 @@ def logged():
     signin_button = Button(app2, text="Sign-in", width=10, command=sigin)
     signin_button.place(x=0, y=100)
 
-
+# If users details is wrong
 def failed():
     messagebox.showerror("UNSUCCESSFUL", "Try Again!")
     life_entry.delete(0, END)
     user_password.delete(0, END)
 
+# Creating and defining the login button that allows user to singin and stores their time
 def login():
 
     user = life_entry.get()
@@ -95,6 +96,7 @@ def login():
 login_button = Button(app, text="Login", width=20, command=login)
 login_button.place(x=50, y=350)
 
+# Creating and defining the signout button that stores users logout time
 def signout():
     username = life_entry.get()
     userpass = user_password.get()
@@ -147,7 +149,7 @@ def register():
 
 
 
-
+# Creating and defining the admin sigin button
     def admin_login():
 
         username = admin_entry.get()
@@ -208,11 +210,12 @@ def register():
                 listBox = Listbox(root, width=70)
                 listBox.place(x=150, y=500)
 
+                # Creating adn defining the listbox that updates new users
                 def populatebox():
                     mydb = mysql.connector.connect(user='lifechoices', password='@Lifechoices1234', host='localhost',
                                                    database='lifechoicesonline')
                     mycursor = mydb.cursor()
-                    sql = "select UserId, Username, Password, Login_time, Logout_time from Users"
+                    sql = "select UserId, Fullname, Username, Password, Login_time, Logout_time from Users"
                     mycursor.execute(sql)
                     for i in mycursor:
                         listBox.insert("end", i)
@@ -236,6 +239,7 @@ def register():
                     uname = Entry(add)
                     passw = Entry(add)
 
+                    # Creating and defining the button that creates a new user and stores their time
                     def create():
                         mydb = mysql.connector.connect(user='lifechoices', password='@Lifechoices1234',
                                                        host='localhost', database='lifechoicesonline')
