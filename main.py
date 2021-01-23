@@ -68,6 +68,7 @@ def failed():
     user_password.delete(0, END)
 
 def login():
+
     user = life_entry.get()
     password = user_password.get()
     sql = 'Select * from Users where Username = %s and Password = %s'
@@ -111,7 +112,7 @@ def signout():
             pass
 
         for i in results:
-            messagebox.showinfo("GOODBYE")
+            messagebox.showinfo("GOODBYE", "You have successfully signed out")
             break
         else:
             life_entry.delete(0, END)
@@ -165,7 +166,7 @@ def register():
                 pass
 
             for i in results:
-                messagebox.showinfo("Welcome Admin")
+                messagebox.showinfo("Welcome Admin", "Welcome to the Admin")
                 window.destroy()
                 root = Tk()
                 root.title("Lifechoices Admin System")
@@ -176,9 +177,49 @@ def register():
                 label_logo2.place(x=0, y=0)
 
                 # Creating and defining the logout button for the admin
+                def logout():
+                    sql = 'Select * from Admin where Username = %s and Password = %s'
+                    mycursor.execute(sql, [(username), (userpass)])
+                    results = mycursor.fetchall()
 
-                logout_btn = Button(root, text="Logout", width=20)
+                    if results:
+                        sql = 'UPDATE Admin SET Logout_time = NOW() WHERE Username = %s'
+                        mycursor.execute(sql, [username])
+                        mydb.commit()
+
+                        if mycursor.rowcount > 0:
+                            # update was success
+                            pass
+
+                        for i in results:
+                            messagebox.showinfo("GOODBYE")
+                            root.destroy()
+                            python = sys.executable
+                            os.execl(python, python, *sys.argv)
+
+                            break
+                        else:
+                            admin_entry.delete(0, END)
+                            admin_entry2.delete(0, END)
+
+                logout_btn = Button(root, text="Logout", width=20, command=logout)
                 logout_btn.place(x=0, y=400)
+
+                listBox = Listbox(root, width=70)
+                listBox.place(x=150, y=500)
+
+                def populatebox():
+                    mydb = mysql.connector.connect(user='lifechoices', password='@Lifechoices1234', host='localhost',
+                                                   database='lifechoicesonline')
+                    mycursor = mydb.cursor()
+                    sql = "select UserId, Username, Password, Login_time, Logout_time from Users"
+                    mycursor.execute(sql)
+                    for i in mycursor:
+                        listBox.insert("end", i)
+
+                update_btn = Button(root, text="Update list", command=lambda: populatebox())
+                update_btn.place(x=350, y=700)
+
 
                 # Creating and defining the add user button that adds a user
                 def add_User():
@@ -247,50 +288,56 @@ def register():
                     win.title("DELETE")
                     win.geometry("200x200")
 
-                    username = life_entry.get()
-                    userpass = user_password.get()
-                    sql = 'Select * from Users where Username = %s and Password = %s'
-                    mycursor.execute(sql, [(username), (userpass)])
-                    results = mycursor.fetchall()
+                    name = Label(win, text="Full Name:")
+                    name.place(x=0, y=0)
 
-                    if results:
-                        sql = 'DROP Users SET Logout_time = NOW() WHERE UserId = %s and Fullname = %s and Username = %s and Password = %s '
-                        mycursor.execute(sql, [(username), (userpass)])
+                    fname = Entry(win)
+                    fname.place(x=0, y=20)
+
+                    name_user= Label(win, text="Username:")
+                    name_user.place(x=0, y=40)
+
+                    uname = Entry(win)
+                    uname.place(x=0, y=60)
+
+                    passw_lbl = Label(win, text="Password:")
+                    passw_lbl.place(x=0, y=80)
+
+                    passw = Entry(win)
+                    passw.place(x=0, y=100)
+
+
+                    def deleting():
+                        fullname1 = fname.get()
+                        sql = "DELETE from Users where Fullname = %s"
+                        mycursor.execute(sql, (fullname1,))
                         mydb.commit()
-                        if mycursor.rowcount > 0:
-                            # update was success
-                            pass
+                        messagebox.showinfo("DELETED", "Delete was a success")
+                        win.destroy()
 
-                        for i in results:
-                            messagebox.showinfo("Delete was a success")
+                    btn_delete = Button(win, text="Delete", width=20, command=deleting)
+                    btn_delete.place(x=0, y=150)
 
-
-
-
-                delete_userbtn = Button(root, text="Delete User", width=20)
+                delete_userbtn = Button(root, text="Delete User", width=20, command=delete_user)
                 delete_userbtn.place(x=0, y=350)
 
     adminbtn = Button(window, text="Login", width=20, command=admin_login)
     adminbtn.place(x=0, y=250)
 
 
-
-
-
-
-
-
-
 register_button = Button(app, text="Register Here", width=20, command=register)
 register_button.place(x=580, y=350)
 # Creating a listbox that lists the users
-listBox = Listbox(app)
-listBox.place(x=315, y=500)
-
-listOfUsers = [[1, 'isaiah'], [2, 'nick'], [3, 'sallie']]
+listBox = Listbox(app, width=70)
+listBox.place(x=150, y=500)
 
 def populatebox():
-    for i in listOfUsers:
+    mydb = mysql.connector.connect(user='lifechoices', password='@Lifechoices1234', host='localhost',
+                                   database='lifechoicesonline')
+    mycursor = mydb.cursor()
+    sql="select UserId, Fullname, Username, Password, Login_time, Logout_time from Users"
+    mycursor.execute(sql)
+    for i in mycursor:
         listBox.insert("end", i)
 
 update_btn = Button(app, text="Update list", command = lambda: populatebox())
