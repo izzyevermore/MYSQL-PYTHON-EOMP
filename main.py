@@ -1,4 +1,4 @@
-#Importing all operations
+# Importing all operations
 from tkinter import *
 import mysql.connector
 from tkinter import messagebox
@@ -6,31 +6,33 @@ import sys
 import os
 
 # Creating GUI that allows log in into lifechoices data bases and displays log in info
-mydb = mysql.connector.connect(user='lifechoices', password='@Lifechoices1234', host='localhost', database='lifechoicesonline')
+mydb = mysql.connector.connect(user='lifechoices', password='@Lifechoices1234', host='localhost',
+                               database='lifechoicesonline')
 
 mycursor = mydb.cursor()
 
 app = Tk()
 app.title("Lifechoices User System")
-app.geometry("800x800")
+app.geometry("1000x1000")
 app.config(bg="black")
 
 # Creating Lifechoices logo
-label_logo = Label(app, text="LIFECHOICES", width=55, font=("Helvetica", 20), bg="light green")
+label_logo = Label(app, text="LIFECHOICES", width=70, font=("Helvetica", 20), bg="light green")
 label_logo.place(x=0, y=0)
 
 # Creating username and password entry for users
 life_label = Label(app, text="Username")
-life_label.place(x=350, y=100)
-
-life_entry = Entry(app, width=40)
-life_entry.place(x=250, y=150)
+life_label.place(x=500, y=100)  # Usernames & Password:
+# isaiah-1234
+life_entry = Entry(app, width=40)  # nick-12345
+life_entry.place(x=400, y=150)  # sallie-123456
 
 life_pass = Label(app, text="Password")
-life_pass.place(x=350, y=200)
+life_pass.place(x=500, y=200)
 
 user_password = Entry(app, width=40, show="*")
-user_password.place(x=250, y=250)
+user_password.place(x=400, y=250)
+
 
 # Defining the login button that shows when a user has logged in as well as when they fail.
 def logged():
@@ -46,6 +48,7 @@ def logged():
 
     number_entry = Entry(app2, width=20)
     number_entry.place(x=0, y=40)
+
     # Creating and Defining the signin button for users to enter their number
     def sigin():
         try:
@@ -57,9 +60,9 @@ def logged():
         except ValueError:
             messagebox.showerror("ValueError", "Please enter numbers only " + life_entry.get())
 
-
     signin_button = Button(app2, text="Sign-in", width=10, command=sigin)
     signin_button.place(x=0, y=100)
+
 
 # If users details is wrong
 def failed():
@@ -67,15 +70,14 @@ def failed():
     life_entry.delete(0, END)
     user_password.delete(0, END)
 
+
 # Creating and defining the login button that allows user to singin and stores their time
 def login():
-
     user = life_entry.get()
     password = user_password.get()
     sql = 'Select * from Users where Username = %s and Password = %s'
     mycursor.execute(sql, [(user), (password)])
     results = mycursor.fetchall()
-
 
     if results:
         sql = 'UPDATE Users SET Login_time = NOW() WHERE Username = %s'
@@ -83,7 +85,7 @@ def login():
         mydb.commit()
 
         if mycursor.rowcount > 0:
-            #update was success
+            # update was success
             pass
 
         for i in results:
@@ -95,6 +97,7 @@ def login():
 
 login_button = Button(app, text="Login", width=20, command=login)
 login_button.place(x=50, y=350)
+
 
 # Creating and defining the signout button that stores users logout time
 def signout():
@@ -122,8 +125,7 @@ def signout():
 
 
 signout_button = Button(app, text="Sign-out", width=20, command=signout)
-signout_button.place(x=300, y=450)
-
+signout_button.place(x=440, y=400)
 
 
 # Creating the register button that takes user to the admin for them to signin
@@ -135,8 +137,8 @@ def register():
     window.geometry("300x300")
     window.config(bg="black")
 
-    admin_username = Label(window, text="Please enter your username: ")
-    admin_username.place(x=0, y=0)
+    admin_username = Label(window, text="Please enter your username: ")  # Admin Username: admin1
+    admin_username.place(x=0, y=0)  # Admin Password: admin1
 
     admin_entry = Entry(window, width=20)
     admin_entry.place(x=0, y=30)
@@ -144,12 +146,10 @@ def register():
     admin_password = Label(window, text="Please enter your password: ")
     admin_password.place(x=0, y=80)
 
-    admin_entry2 = Entry(window, width=20)
+    admin_entry2 = Entry(window, width=20, show="*")
     admin_entry2.place(x=0, y=110)
 
-
-
-# Creating and defining the admin sigin button
+    # Creating and defining the admin sigin button
     def admin_login():
 
         username = admin_entry.get()
@@ -172,10 +172,10 @@ def register():
                 window.destroy()
                 root = Tk()
                 root.title("Lifechoices Admin System")
-                root.geometry("800x800")
+                root.geometry("1000x700")
                 root.config(bg="black")
 
-                label_logo2 = Label(root, text="LIFECHOICES", width=55, font=("Helvetica", 20), bg="light green")
+                label_logo2 = Label(root, text="LIFECHOICES", width=70, font=("Helvetica", 20), bg="light green")
                 label_logo2.place(x=0, y=0)
 
                 # Creating and defining the logout button for the admin
@@ -194,7 +194,7 @@ def register():
                             pass
 
                         for i in results:
-                            messagebox.showinfo("GOODBYE")
+                            messagebox.showinfo("GOODBYE", "QUITTTING PROGRAMME")
                             root.destroy()
                             python = sys.executable
                             os.execl(python, python, *sys.argv)
@@ -205,24 +205,69 @@ def register():
                             admin_entry2.delete(0, END)
 
                 logout_btn = Button(root, text="Logout", width=20, command=logout)
-                logout_btn.place(x=0, y=400)
+                logout_btn.place(x=700, y=500)
 
-                listBox = Listbox(root, width=70)
-                listBox.place(x=150, y=500)
+                userid_list = Label(root, text="UserId")
+                userid_list.place(x=50, y=100)
+                listBox = Listbox(root, width=20)
+                listBox.place(x=50, y=150)
+
+                username_list = Label(root, text="Username")
+                username_list.place(x=250, y=100)
+                listBox3 = Listbox(root, width=20)
+                listBox3.place(x=250, y=150)
+
+                password_list = Label(root, text="Password")
+                password_list.place(x=450, y=100)
+                listBox4 = Listbox(root, width=20)
+                listBox4.place(x=450, y=150)
+
+                login_list = Label(root, text="Login")
+                login_list.place(x=650, y=100)
+                listBox5 = Listbox(root, width=20)
+                listBox5.place(x=650, y=150)
+
+                logout_list = Label(root, text="Logout")
+                logout_list.place(x=850, y=100)
+                listbox6 = Listbox(root, width=20)
+                listbox6.place(x=850, y=150)
 
                 # Creating adn defining the listbox that updates new users
                 def populatebox():
                     mydb = mysql.connector.connect(user='lifechoices', password='@Lifechoices1234', host='localhost',
                                                    database='lifechoicesonline')
                     mycursor = mydb.cursor()
-                    sql = "select UserId, Fullname, Username, Password, Login_time, Logout_time from Users"
+                    sql = "select UserId FROM Users"
                     mycursor.execute(sql)
                     for i in mycursor:
                         listBox.insert("end", i)
 
-                update_btn = Button(root, text="Update list", command=lambda: populatebox())
-                update_btn.place(x=350, y=700)
+                    mycursor.execute("SELECT Username FROM Users")
+                    name = mycursor.fetchall()
 
+                    for i in name:
+                        listBox3.insert(END, i)
+
+                    mycursor.execute("SELECT Password FROM Users")
+                    pass1 = mycursor.fetchall()
+
+                    for i in pass1:
+                        listBox4.insert(END, i)
+
+                    mycursor.execute("SELECT Login_time FROM Users")
+                    time = mycursor.fetchall()
+
+                    for i in time:
+                        listBox5.insert(END, i)
+
+                    mycursor.execute("SELECT Logout_time FROM Users")
+                    time2 = mycursor.fetchall()
+
+                    for i in time2:
+                        listbox6.insert(END, i)
+
+                update_btn = Button(root, text="Update list", command=lambda: populatebox())
+                update_btn.place(x=450, y=400)
 
                 # Creating and defining the add user button that adds a user
                 def add_User():
@@ -250,13 +295,13 @@ def register():
                         y = uname.get()
                         z = passw.get()
 
-                        if x=='' or y=='' or z=='':
+                        if x == '' or y == '' or z == '':
                             messagebox.showerror("TRY AGAIN", "Please do not leave the fields empty")
                             add.destroy()
                             create()
                         else:
                             mydb = mysql.connector.connect(user='lifechoices', password='@Lifechoices1234',
-                                                       host='localhost', database='lifechoicesonline')
+                                                           host='localhost', database='lifechoicesonline')
 
                             try:
                                 mycursor = mydb.cursor()
@@ -267,6 +312,7 @@ def register():
                                 messagebox.showerror("OOPS", "Error connecting to databases")
                             messagebox.showinfo("SUCCESS " + x + " has been added to the server")
                             add.destroy()
+
                     create_btn = Button(add, text="Add User", command=create)
 
                     # placements
@@ -279,7 +325,7 @@ def register():
                     create_btn.place(x=25, y=130)
 
                 add_userbtn = Button(root, text="Add User", width=20, command=add_User)
-                add_userbtn.place(x=0, y=300)
+                add_userbtn.place(x=100, y=500)
 
                 # Creating and defining the delete user button that deletes a user
 
@@ -298,7 +344,7 @@ def register():
                     fname = Entry(win)
                     fname.place(x=0, y=20)
 
-                    name_user= Label(win, text="Username:")
+                    name_user = Label(win, text="Username:")
                     name_user.place(x=0, y=40)
 
                     uname = Entry(win)
@@ -309,7 +355,6 @@ def register():
 
                     passw = Entry(win)
                     passw.place(x=0, y=100)
-
 
                     def deleting():
                         fullname1 = fname.get()
@@ -323,30 +368,75 @@ def register():
                     btn_delete.place(x=0, y=150)
 
                 delete_userbtn = Button(root, text="Delete User", width=20, command=delete_user)
-                delete_userbtn.place(x=0, y=350)
+                delete_userbtn.place(x=400, y=500)
 
     adminbtn = Button(window, text="Login", width=20, command=admin_login)
     adminbtn.place(x=0, y=250)
 
 
 register_button = Button(app, text="Register Here", width=20, command=register)
-register_button.place(x=580, y=350)
-# Creating a listbox that lists the users
-listBox = Listbox(app, width=70)
-listBox.place(x=150, y=500)
+register_button.place(x=800, y=350)
+# Creating a listbox that lists the users information
+userid_list = Label(app, text="UserId")
+userid_list.place(x=50, y=500)
+listBox = Listbox(app, width=20)
+listBox.place(x=50, y=550)
+
+username_list = Label(app, text="Username")
+username_list.place(x=250, y=500)
+listBox3 = Listbox(app, width=20)
+listBox3.place(x=250, y=550)
+
+password_list = Label(app, text="Password")
+password_list.place(x=450, y=500)
+listBox4 = Listbox(app, width=20)
+listBox4.place(x=450, y=550)
+
+login_list = Label(app, text="Login")
+login_list.place(x=650, y=500)
+listBox5 = Listbox(app, width=20)
+listBox5.place(x=650, y=550)
+
+logout_list = Label(app, text="Logout")
+logout_list.place(x=850, y=500)
+listbox6 = Listbox(app, width=20)
+listbox6.place(x=850, y=550)
+
 
 def populatebox():
     mydb = mysql.connector.connect(user='lifechoices', password='@Lifechoices1234', host='localhost',
                                    database='lifechoicesonline')
     mycursor = mydb.cursor()
-    sql="select UserId, Fullname, Username, Password, Login_time, Logout_time from Users"
+    sql = "select UserId FROM Users"
     mycursor.execute(sql)
     for i in mycursor:
         listBox.insert("end", i)
 
-update_btn = Button(app, text="Update list", command = lambda: populatebox())
-update_btn.place(x=350, y=700)
+    mycursor.execute("SELECT Username FROM Users")
+    name = mycursor.fetchall()
 
+    for i in name:
+        listBox3.insert(END, i)
 
+    mycursor.execute("SELECT Password FROM Users")
+    pass1 = mycursor.fetchall()
+
+    for i in pass1:
+        listBox4.insert(END, i)
+
+    mycursor.execute("SELECT Login_time FROM Users")
+    time = mycursor.fetchall()
+
+    for i in time:
+        listBox5.insert(END, i)
+
+    mycursor.execute("SELECT Logout_time FROM Users")
+    time2 = mycursor.fetchall()
+
+    for i in time2:
+        listbox6.insert(END, i)
+
+update_btn = Button(app, text="Update list", command=lambda: populatebox())
+update_btn.place(x=450, y=800)
 
 app.mainloop()
